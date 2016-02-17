@@ -1,0 +1,17 @@
+Consumer Key (API Key)	Lq6Se575yGeYBsnmEHcmJCRfQ
+Consumer Secret (API Secret)	kh9tjyL3BhPrRT1MIKuKAIsCGJ3JXwv5iexZISL67MKEWxwn6Y
+Access Level	Read and write (modify app permissions)
+Owner	ipande
+Owner ID	292486633
+
+1) Get Home timeline
+2) create a new tweet (compose)
+
+BaseURL: https://api.twitter.com/1.1/
+
+
+Endpoints:
+GET statuses/Hometimline : statuses/home_timeline.json
+
+count = N
+since_id=1 (most recent tweets)
