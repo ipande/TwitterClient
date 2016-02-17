@@ -40,6 +40,34 @@ public class Tweet extends Model {
         super();
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getScreen_name() {
+        return screen_name;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public Long getUid() {
+        return uid;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
     // Add a constructor that creates an object from the JSON response
     public Tweet(JSONObject object){
         super();

@@ -3,9 +3,11 @@ package com.codepath.apps.iTweetClient.actvities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ListView;
 
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
+import com.codepath.apps.iTweetClient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -18,12 +20,21 @@ import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
 public class TimelineActivity extends AppCompatActivity {
     private TwitterClient client;
+    private TweetsArrayAdapter aTweets;
+    private ArrayList<Tweet> tweets;
+    private ListView lvTweets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         client = new TwitterClient(getApplicationContext());
+
+        lvTweets = (ListView) findViewById(R.id.lvTweets);
+        tweets = new ArrayList<>();
+        aTweets = new TweetsArrayAdapter(this,tweets);
+
+        lvTweets.setAdapter(aTweets);
 
         populateTimeline();
 
@@ -40,6 +51,8 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("TwitterClient","Are you serious?"+json.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJson(json);
                 Log.d(APP_TAG,"Tweets: "+tweets.toString());
+                aTweets.addAll(tweets);
+                aTweets.notifyDataSetChanged();
             }
 
             @Override
