@@ -11,17 +11,21 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#3a8bf5"
+        android:background="#ffffff"
         android:paddingRight="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Silly"
+        android:text="UserName"
         android:id="@+id/tvUserName"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:typeface="monospace"
+        android:capitalize="words" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,5 +34,18 @@
         android:id="@+id/tvBody"
         android:layout_alignBottom="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage"
-        android:layout_toEndOf="@+id/ivProfileImage" />
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:layout_below="@id/tvUserName"
+        android:layout_marginLeft="5dp"
+        android:typeface="sans" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:id="@+id/tvName"
+        android:layout_toRightOf="@+id/tvUserName"
+        android:layout_marginLeft="5dp"
+        android:layout_alignBottom="@+id/tvUserName"
+        android:typeface="serif" />
 </RelativeLayout>

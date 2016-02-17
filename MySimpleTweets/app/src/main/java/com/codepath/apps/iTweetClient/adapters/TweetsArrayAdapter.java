@@ -12,6 +12,8 @@ import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 /**
@@ -34,9 +36,11 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
         TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
 
         tvUserName.setText(tweet.getUserName());
         tvBody.setText(tweet.getBody());
+        tvName.setText(tweet.getScreen_name());
 
         ivProfileImage.setImageResource(android.R.color.transparent); // clear out an old image for recycled view
         Picasso.with(getContext()).load(tweet.getProfileImage()).fit().into(ivProfileImage);
