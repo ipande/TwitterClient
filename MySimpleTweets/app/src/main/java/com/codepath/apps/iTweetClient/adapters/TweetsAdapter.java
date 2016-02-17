@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
+import com.codepath.apps.iTweetClient.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public TextView tvScreenName;
         public TextView tvBody;
         public ImageView ivProfileImage;
+        public TextView tvTimestamp;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -31,6 +33,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvScreenName = (TextView) itemView.findViewById(R.id.tvName);
+            tvTimestamp = (TextView) itemView.findViewById(R.id.tvTimestamp);
 
         }
     } // End of ViewHolder class
@@ -73,6 +76,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         TextView tvBody = viewHolder.tvBody;
         Log.d(Constants.APP_TAG,"setting tvBody to: "+tweet.getBody());
         tvBody.setText(tweet.getBody());
+
+        TextView tvTimestamp = viewHolder.tvTimestamp;
+        tvTimestamp.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
 
         ImageView ivProfileImg = viewHolder.ivProfileImage;
         ivProfileImg.setImageResource(0);

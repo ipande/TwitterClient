@@ -2,13 +2,14 @@ package com.codepath.apps.iTweetClient.utils;
 
 
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class ParseRelativeDate {
-    public String getRelativeTimeAgo(String rawJsonDate) {
+    public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
         SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
         sf.setLenient(true);
@@ -16,8 +17,10 @@ public class ParseRelativeDate {
         String relativeDate = "";
         try {
             long dateMillis = sf.parse(rawJsonDate).getTime();
+
             relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
-                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS,DateUtils.FORMAT_ABBREV_ALL).toString();
+            Log.d(Constants.APP_TAG,"Relative Date: "+relativeDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
