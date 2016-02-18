@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.view.View;
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
+import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -65,11 +68,19 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO: Add compose tweet fragment
+                showComposeTweetFragment();
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
             }
         });
     }
+
+    private void showComposeTweetFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+        TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet");
+        tweetFragment.show(fm, "Compose Tweet");
+    }
+
 
     // Fill in listview with tweet JSON objects
     private void populateTimeline(int page) {
