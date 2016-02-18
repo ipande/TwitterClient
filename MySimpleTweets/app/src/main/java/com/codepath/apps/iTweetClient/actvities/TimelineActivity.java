@@ -1,16 +1,15 @@
 package com.codepath.apps.iTweetClient.actvities;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.ListView;
 
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
-import com.codepath.apps.iTweetClient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -20,26 +19,27 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
 public class TimelineActivity extends AppCompatActivity {
     private TwitterClient client;
-    private TweetsArrayAdapter aTweets;
+
     private ArrayList<Tweet> tweets;
-//    private ListView lvTweets;
-    private RecyclerView rvTweets;
+
+    @Nullable @Bind(R.id.rvTweets) RecyclerView rvTweets;
     private TweetsAdapter tweetsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        client = new TwitterClient(getApplicationContext());
+        ButterKnife.bind(this);
 
-//        lvTweets = (ListView) findViewById(R.id.lvTweets);
-        rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
+        client = new TwitterClient(getApplicationContext());
         tweets = new ArrayList<>();
-//        aTweets = new TweetsArrayAdapter(this,tweets);
         tweetsAdapter = new TweetsAdapter(tweets,getApplicationContext());
 
         rvTweets.setAdapter(tweetsAdapter);
@@ -56,12 +56,6 @@ public class TimelineActivity extends AppCompatActivity {
                 populateTimeline(page);
             }
         });
-
-//        lvTweets.setAdapter(aTweets);
-
-
-
-
     }
 
     // Fill in listview with tweet JSON objects
@@ -78,8 +72,6 @@ public class TimelineActivity extends AppCompatActivity {
 
                 tweets.addAll(newTweets);
                 tweetsAdapter.notifyDataSetChanged();
-//                aTweets.addAll(tweets);
-//                aTweets.notifyDataSetChanged();
             }
 
             @Override

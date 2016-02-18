@@ -18,22 +18,32 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        public TextView tvUserName;
-        public TextView tvScreenName;
-        public TextView tvBody;
-        public ImageView ivProfileImage;
-        public TextView tvTimestamp;
+//        public TextView tvUserName;
+//        public TextView tvScreenName;
+//        public TextView tvBody;
+//        public ImageView ivProfileImage;
+//        public TextView tvTimestamp;
+        @Bind(R.id.tvUserName) TextView tvUserName;
+        @Bind(R.id.tvName) TextView tvScreenName;
+        @Bind(R.id.tvBody) TextView tvBody;
+        @Bind(R.id.tvTimestamp) TextView tvTimestamp;
+        @Bind(R.id.ivProfileImage) ImageView ivProfileImage;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
-            tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
-            tvBody = (TextView) itemView.findViewById(R.id.tvBody);
-            tvScreenName = (TextView) itemView.findViewById(R.id.tvName);
-            tvTimestamp = (TextView) itemView.findViewById(R.id.tvTimestamp);
+            ButterKnife.bind(this,itemView);
+//            ivProfileImage = (ImageView) itemView.findViewById(R.id.ivProfileImage);
+//            tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
+//            tvBody = (TextView) itemView.findViewById(R.id.tvBody);
+//            tvScreenName = (TextView) itemView.findViewById(R.id.tvName);
+//            tvTimestamp = (TextView) itemView.findViewById(R.id.tvTimestamp);
 
         }
     } // End of ViewHolder class
