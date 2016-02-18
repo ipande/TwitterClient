@@ -1,7 +1,9 @@
 package com.codepath.apps.iTweetClient;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.codepath.apps.iTweetClient.utils.Constants;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -48,6 +50,7 @@ public class TwitterClient extends OAuthBaseClient {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
 		params.put("page", String.valueOf(page));
+		Log.d(Constants.APP_TAG,"loading tweets page: "+page);
 		getClient().get(apiUrl, params, handler);
 	}
 

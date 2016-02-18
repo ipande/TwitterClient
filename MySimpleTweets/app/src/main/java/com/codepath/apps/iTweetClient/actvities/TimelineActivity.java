@@ -12,6 +12,7 @@ import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
 import com.codepath.apps.iTweetClient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.iTweetClient.models.Tweet;
+import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -42,18 +43,30 @@ public class TimelineActivity extends AppCompatActivity {
         tweetsAdapter = new TweetsAdapter(tweets,getApplicationContext());
 
         rvTweets.setAdapter(tweetsAdapter);
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+        rvTweets.setLayoutManager(linearLayoutManager);
+        populateTimeline(0);
+
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                populateTimeline(page);
+            }
+        });
 
 //        lvTweets.setAdapter(aTweets);
 
 
-        populateTimeline();
+
 
     }
 
     // Fill in listview with tweet JSON objects
-    private void populateTimeline() {
-        client.getHomeTimeline(1, new JsonHttpResponseHandler() {
+    private void populateTimeline(int page) {
+        client.getHomeTimeline(page, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 // Response is automatically parsed into a JSONArray
