@@ -84,7 +84,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         tvScreenName.setText(tweet.getScreen_name());
 
         TextView tvBody = viewHolder.tvBody;
-        Log.d(Constants.APP_TAG,"setting tvBody to: "+tweet.getBody());
+//        Log.d(Constants.APP_TAG,"setting tvBody to: "+tweet.getBody());
         tvBody.setText(tweet.getBody());
 
         TextView tvTimestamp = viewHolder.tvTimestamp;

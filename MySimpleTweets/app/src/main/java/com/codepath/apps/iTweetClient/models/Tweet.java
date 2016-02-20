@@ -114,4 +114,9 @@ public class Tweet extends Model {
         return tweets;
     }
 
+    public static Tweet fromJSONObject(JSONObject response) {
+        Tweet tweet = new Tweet(response);
+        tweet.save();
+        return tweet;
+    }
 }
