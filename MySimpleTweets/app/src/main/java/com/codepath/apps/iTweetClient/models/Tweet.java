@@ -35,6 +35,8 @@ public class Tweet extends Model {
     @Column(name = "createdAt")
     String createdAt;
 
+
+
     // Make sure to always define this constructor with no arguments
     public Tweet() {
         super();

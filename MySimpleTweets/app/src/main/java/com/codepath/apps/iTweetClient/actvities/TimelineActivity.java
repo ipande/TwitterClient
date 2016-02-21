@@ -136,8 +136,10 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
     public void onFinishTweetingDialog(Tweet newTweet) {
         if(newTweet!=null){
             tweets.add(0,newTweet);
-            tweetsAdapter.notifyItemChanged(0);
-            populateTimeline(0);
+//            tweetsAdapter.notifyItemChanged(0);
+            tweetsAdapter.notifyDataSetChanged();
+//            swipeContainer.setRefreshing(true);
+//            refreshTimeLine();
         }
         else{
             Log.d(APP_TAG,"There was an error posting your tweet");

@@ -2,9 +2,8 @@ package com.codepath.apps.iTweetClient.fragments;
 
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,17 +19,16 @@ import android.widget.Toast;
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.models.Tweet;
-import com.codepath.apps.iTweetClient.utils.Constants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static com.codepath.apps.iTweetClient.utils.Constants.*;
+import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
+import static com.codepath.apps.iTweetClient.utils.Constants.TWEET_LENGTH;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -100,9 +97,6 @@ public class TweetFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 postTweet(mTweetText.getText().toString());
-                TweetFragmentDialogListener listener = (TweetFragmentDialogListener) getActivity();
-                listener.onFinishTweetingDialog(newTweet);
-                dismiss();
             }
         });
 
@@ -117,7 +111,9 @@ public class TweetFragment extends DialogFragment {
                     Toast.makeText(mContext,"Tweeted successfully",Toast.LENGTH_SHORT).show();
                     tweetingSuccessfull= true;
                     newTweet = Tweet.fromJSONObject(response);
-
+                    TweetFragmentDialogListener listener = (TweetFragmentDialogListener) getActivity();
+                    listener.onFinishTweetingDialog(newTweet);
+                    dismiss();
                 }
 
 
