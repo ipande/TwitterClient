@@ -13,13 +13,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.models.Tweet;
+import com.codepath.apps.iTweetClient.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -37,11 +41,17 @@ public class TweetFragment extends DialogFragment {
     @Bind(R.id.etTweet) EditText mTweetText;
     @Bind(R.id.tvChars) TextView tvCharsLeft;
     @Bind(R.id.btComposeTweet) Button btTweet;
+    @Bind(R.id.ibCancel) ImageButton btCancel;
+    @Bind(R.id.tvScreenName) TextView tvScreenName;
+    @Bind(R.id.tvUserName) TextView tvUserName;
+    @Bind(R.id.ivProfilePic) ImageView ivProfilePic;
+
     int textColor;
     private TwitterClient client;
     private Context mContext;
     private boolean tweetingSuccessfull = false;
     private Tweet newTweet;
+    private static User currUser;
 
     public TweetFragment() {
         // Required empty public constructor
@@ -53,11 +63,12 @@ public class TweetFragment extends DialogFragment {
     }
 
 
-    public static TweetFragment newInstance(String title) {
+    public static TweetFragment newInstance(String title, User user) {
         TweetFragment frag = new TweetFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         frag.setArguments(args);
+        currUser = user;
         return frag;
     }
 
@@ -86,17 +97,25 @@ public class TweetFragment extends DialogFragment {
         String title = getArguments().getString("title", "Enter Name");
         getDialog().setTitle(title);
         mContext = view.getContext();
-//        mTweetText.requestFocus();
-//        getDialog().getWindow().setSoftInputMode(
-//                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         textColor = tvCharsLeft.getCurrentTextColor();
         mTweetText.addTextChangedListener(textWatcher);
+
+        Picasso.with(getContext()).load(currUser.getProfileImage()).fit().into(ivProfilePic);
+        tvScreenName.setText(currUser.getScreen_name());
+        tvUserName.setText(currUser.getUserName());
 
         btTweet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 postTweet(mTweetText.getText().toString());
+            }
+        });
+
+        btCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
 

@@ -18,11 +18,13 @@ import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
 import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetFragment.TweetFragmentDialogListener;
 import com.codepath.apps.iTweetClient.models.Tweet;
+import com.codepath.apps.iTweetClient.models.User;
 import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -42,6 +44,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
     private TweetsAdapter tweetsAdapter;
     private static long MAX_ID = 1;
 
+    private User currUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +60,7 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
         rvTweets.setLayoutManager(linearLayoutManager);
+
         populateTimeline(0);
 
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -97,9 +102,26 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
     }
 
     private void showComposeTweetFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet");
-        tweetFragment.show(fm, "Compose Tweet");
+        getUserCredentials();
+    }
+
+    private void getUserCredentials() {
+        client.getUserCredentials(new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+               Log.d(APP_TAG,"User credentials are here: "+response.toString());
+                currUser = User.fromJSON(response);
+                FragmentManager fm = getSupportFragmentManager();
+                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser);
+                tweetFragment.show(fm, "Compose Tweet");
+            }
+
+
+            @Override
+            public void onFailure(int status, Header[] headers, Throwable t, JSONObject obj){
+                Log.d(APP_TAG,"Failed to get user credentials"+t.getMessage());
+            }
+        });
     }
 
 
