@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.codepath.apps.iTweetClient.actvities.TimelineActivity;
+import com.codepath.apps.iTweetClient.utils.Constants;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 // Where the user will sign in
@@ -47,7 +48,8 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     // Uses the client to initiate OAuth authorization
     // This should be tied to a button used to login
     public void loginToRest(View view) {
-        getClient().connect();
+        if(Constants.isNetworkAvailable(this))
+            getClient().connect();
     }
 
 }

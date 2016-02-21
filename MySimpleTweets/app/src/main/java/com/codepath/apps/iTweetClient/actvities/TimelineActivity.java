@@ -19,6 +19,7 @@ import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetFragment.TweetFragmentDialogListener;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.models.User;
+import com.codepath.apps.iTweetClient.utils.Constants;
 import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -127,8 +128,8 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
 
     // Fill in listview with tweet JSON objects
     private void populateTimeline(long page) {
-//        if(page == 0)
-//            tweetsAdapter.clearData();
+
+        // TODO: add logic for checking internet
 
         client.getHomeTimeline(page, new JsonHttpResponseHandler() {
             @Override
