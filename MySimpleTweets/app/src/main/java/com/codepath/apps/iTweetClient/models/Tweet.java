@@ -10,12 +10,13 @@ import com.codepath.apps.iTweetClient.utils.Constants;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
 import static com.codepath.apps.iTweetClient.utils.Constants.*;
 
-
+@Parcel(analyze={Tweet.class})
 @Table(name = "Tweets")
 public class Tweet extends Model {
     // Define database columns and associated fields
