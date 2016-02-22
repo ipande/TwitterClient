@@ -30,7 +30,7 @@ public class Tweet extends Model {
     String profileImage;
     @Column(name = "body")
     String body;
-    @Column(name = "uid")
+    @Column(name = "uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     Long uid;
 
     @Column(name = "createdAt")
