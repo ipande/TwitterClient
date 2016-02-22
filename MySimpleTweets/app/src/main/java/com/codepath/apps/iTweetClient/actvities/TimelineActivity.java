@@ -11,7 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
@@ -28,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -130,29 +133,46 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
     private void populateTimeline(long page) {
 
         // TODO: add logic for checking internet
-
-        client.getHomeTimeline(page, new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                // Response is automatically parsed into a JSONArray
-                //json.getJSONObject(0).getLong("id");
-                swipeContainer.setRefreshing(false);
-                ArrayList<Tweet> newTweets = Tweet.fromJson(json);
-                Log.d(APP_TAG,"Tweets: "+tweets.toString());
-                if(newTweets!=null && newTweets.size() > 0) {
-                    MAX_ID = newTweets.get(newTweets.size() - 1).getUid();
-                    Log.d(APP_TAG,"Max ID: "+MAX_ID);
+        if(Constants.isNetworkAvailable(getApplicationContext())) {
+            client.getHomeTimeline(page, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                    // Response is automatically parsed into a JSONArray
+                    //json.getJSONObject(0).getLong("id");
+                    swipeContainer.setRefreshing(false);
+                    ArrayList<Tweet> newTweets = Tweet.fromJson(json);
+                    Log.d(APP_TAG, "Tweets: " + tweets.toString());
+                    if (newTweets != null && newTweets.size() > 0) {
+                        MAX_ID = newTweets.get(newTweets.size() - 1).getUid();
+                        Log.d(APP_TAG, "Max ID: " + MAX_ID);
+                    }
+                    tweets.addAll(newTweets);
+                    tweetsAdapter.notifyDataSetChanged();
                 }
-                tweets.addAll(newTweets);
-                tweetsAdapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d(APP_TAG,"Failed"+statusCode+" resp "+responseString + "err: "+throwable.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                    Log.d(APP_TAG, "Failed" + statusCode + " resp " + responseString + "err: " + throwable.getMessage());
+                }
+            });
+        }
+        else{
+            // 1. fetch tweets from DB
+            // 2. Populate adapter
+            // 3. refresh view
+            retrieveDBTweets();
+        }
+    }
 
+    private void retrieveDBTweets() {
+        Toast.makeText(getApplicationContext(),"Retrieving tweets from DB",Toast.LENGTH_LONG).show();
+        tweetsAdapter.clearData();
+        List<Tweet> savedTweets = new Select().from(Tweet.class)
+                .orderBy("uid DESC")
+                .execute();
+        tweets.addAll(savedTweets);
+        tweetsAdapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
     }
 
     @Override
