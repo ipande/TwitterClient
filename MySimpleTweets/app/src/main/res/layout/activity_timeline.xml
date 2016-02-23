@@ -12,7 +12,7 @@
         <fragment
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:name="com.codepath.apps.iTweetClient.fragments.TweetsListFragment"
+            android:name="com.codepath.apps.iTweetClient.fragments.MentionsTimelineFragment"
             android:id="@+id/fragment_timeline" />
     </FrameLayout>
 

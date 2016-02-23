@@ -6,6 +6,7 @@ import android.util.Log;
 import com.codepath.apps.iTweetClient.utils.Constants;
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
@@ -64,6 +65,13 @@ public class TwitterClient extends OAuthBaseClient {
 	public void getUserCredentials(AsyncHttpResponseHandler handler){
 		String apiUrl = getApiUrl("account/verify_credentials.json");
 		RequestParams params = new RequestParams();
+		getClient().get(apiUrl, params, handler);
+	}
+
+	public void getMentionsTimeline(long page, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/mentions_timeline.json");
+		RequestParams params = new RequestParams();
+		params.put("count",25);
 		getClient().get(apiUrl, params, handler);
 	}
 

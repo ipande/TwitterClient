@@ -41,8 +41,8 @@ import static com.codepath.apps.iTweetClient.utils.Constants.*;
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
 public class TimelineActivity extends AppCompatActivity {//implements TweetFragmentDialogListener {
-    private TwitterClient client;
-    private static long MAX_ID = 1;
+
+
 
     private User currUser;
 //    SwipeRefreshLayout swipeContainer;
@@ -55,12 +55,9 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
 
-        client = new TwitterClient(getApplicationContext());
-        populateTimeline(0);
 
-        if(savedInstanceState == null) {
-            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
-        }
+
+
 
 
 //        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
@@ -73,13 +70,13 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 //            }
 //        });
 //
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showComposeTweetFragment();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showComposeTweetFragment();
+//            }
+//        });
 
 //        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
 //                android.R.color.holo_green_light,
@@ -101,64 +98,30 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 //
 //    }
 
-    private void showComposeTweetFragment() {
-        getUserCredentials();
-    }
+//    private void showComposeTweetFragment() {
+//        getUserCredentials();
+//    }
 
-    private void getUserCredentials() {
-        client.getUserCredentials(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-               Log.d(APP_TAG,"User credentials are here: "+response.toString());
-                currUser = User.fromJSON(response);
-                FragmentManager fm = getSupportFragmentManager();
-                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser);
-                tweetFragment.show(fm, "Compose Tweet");
-            }
+//    private void getUserCredentials() {
+//        client.getUserCredentials(new JsonHttpResponseHandler(){
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//               Log.d(APP_TAG,"User credentials are here: "+response.toString());
+//                currUser = User.fromJSON(response);
+//                FragmentManager fm = getSupportFragmentManager();
+//                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser);
+//                tweetFragment.show(fm, "Compose Tweet");
+//            }
+//
+//
+//            @Override
+//            public void onFailure(int status, Header[] headers, Throwable t, JSONObject obj){
+//                Log.d(APP_TAG,"Failed to get user credentials"+t.getMessage());
+//            }
+//        });
+//    }
 
 
-            @Override
-            public void onFailure(int status, Header[] headers, Throwable t, JSONObject obj){
-                Log.d(APP_TAG,"Failed to get user credentials"+t.getMessage());
-            }
-        });
-    }
-
-
-    // Fill in listview with tweet JSON objects
-    private void populateTimeline(long page) {
-
-        // TODO: add logic for checking internet
-        if(Constants.isNetworkAvailable(getApplicationContext())) {
-            client.getHomeTimeline(page, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                    // Response is automatically parsed into a JSONArray
-                    //json.getJSONObject(0).getLong("id");
-//                    swipeContainer.setRefreshing(false);
-                    ArrayList<Tweet> newTweets = Tweet.fromJson(json);
-//                    Log.d(APP_TAG, "Tweets: " + tweets.toString());
-                    if (newTweets != null && newTweets.size() > 0) {
-                        MAX_ID = newTweets.get(newTweets.size() - 1).getUid();
-                        Log.d(APP_TAG, "Max ID: " + MAX_ID);
-                    }
-                    fragmentTweetsList.addAll(newTweets);
-//                    tweetsAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                    Log.d(APP_TAG, "Failed" + statusCode + " resp " + responseString + "err: " + throwable.getMessage());
-                }
-            });
-        }
-        else{
-            // 1. fetch tweets from DB
-            // 2. Populate adapter
-            // 3. refresh view
-//            retrieveDBTweets();
-        }
-    }
 
 //    private void retrieveDBTweets() {
 //        Toast.makeText(getApplicationContext(),"Retrieving tweets from DB",Toast.LENGTH_LONG).show();
