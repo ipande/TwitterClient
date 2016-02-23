@@ -6,6 +6,8 @@ import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,9 +17,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
+import com.codepath.apps.iTweetClient.fragments.HomeTimelineFragment;
+import com.codepath.apps.iTweetClient.fragments.MentionsTimelineFragment;
+import com.codepath.apps.iTweetClient.fragments.PageFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetFragment.TweetFragmentDialogListener;
 import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
@@ -56,6 +62,49 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
         ButterKnife.bind(this);
 
 
+        // Get the ViewPager and set it's PagerAdapter so that it can display items
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
+
+        // Give the PagerSlidingTabStrip the ViewPager
+        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        // Attach the view pager to the tab strip
+        tabsStrip.setViewPager(viewPager);
+    }
+
+    public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+        private String tabTitles[] = new String[] { "Home Timeline", "Mentions Timeline" };
+
+        public SampleFragmentPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Log.d(APP_TAG,"position: "+position);
+            switch(position){
+                case 0: {
+                    return new HomeTimelineFragment();
+                }
+                case 1: {
+                    return new MentionsTimelineFragment();
+                }
+                default: return null;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            // Generate title based on item position
+            return tabTitles[position];
+        }
+    }
+
 
 
 
@@ -90,7 +139,7 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 //            }
 //        });
 
-    }
+//    }
 
 //    private void refreshTimeLine() {
 //        tweetsAdapter.clearData();
@@ -120,6 +169,9 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 //            }
 //        });
 //    }
+
+
+
 
 
 
