@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
 import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetFragment.TweetFragmentDialogListener;
+import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.models.User;
 import com.codepath.apps.iTweetClient.utils.Constants;
@@ -38,17 +40,14 @@ import butterknife.ButterKnife;
 import static com.codepath.apps.iTweetClient.utils.Constants.*;
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
-public class TimelineActivity extends AppCompatActivity implements TweetFragmentDialogListener {
+public class TimelineActivity extends AppCompatActivity {//implements TweetFragmentDialogListener {
     private TwitterClient client;
-    @Bind(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
-
-    private ArrayList<Tweet> tweets;
-
-    @Nullable @Bind(R.id.rvTweets) RecyclerView rvTweets;
-    private TweetsAdapter tweetsAdapter;
     private static long MAX_ID = 1;
 
     private User currUser;
+//    SwipeRefreshLayout swipeContainer;
+
+    TweetsListFragment fragmentTweetsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,26 +56,23 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
         ButterKnife.bind(this);
 
         client = new TwitterClient(getApplicationContext());
-        tweets = new ArrayList<>();
-        tweetsAdapter = new TweetsAdapter(tweets,getApplicationContext());
-
-        rvTweets.setAdapter(tweetsAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-
-        rvTweets.setLayoutManager(linearLayoutManager);
-
         populateTimeline(0);
 
-        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                Log.d(APP_TAG,"Loading tweets from page: "+page);
-                populateTimeline(MAX_ID);
-            }
-        });
+        if(savedInstanceState == null) {
+            fragmentTweetsList = (TweetsListFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_timeline);
+        }
 
+
+//        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount) {
+//                // Triggered only when new data needs to be appended to the list
+//                // Add whatever code is needed to append new items to the bottom of the list
+//                Log.d(APP_TAG,"Loading tweets from page: "+page);
+//                populateTimeline(MAX_ID);
+//            }
+//        });
+//
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,25 +81,25 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
             }
         });
 
-        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshTimeLine();
-            }
-        });
-
-    }
-
-    private void refreshTimeLine() {
-        tweetsAdapter.clearData();
-        populateTimeline(FIRST_PAGE);
+//        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+//                android.R.color.holo_green_light,
+//                android.R.color.holo_orange_light,
+//                android.R.color.holo_red_light);
+//
+//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                refreshTimeLine();
+//            }
+//        });
 
     }
+
+//    private void refreshTimeLine() {
+//        tweetsAdapter.clearData();
+//        populateTimeline(FIRST_PAGE);
+//
+//    }
 
     private void showComposeTweetFragment() {
         getUserCredentials();
@@ -139,15 +135,15 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
                 public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                     // Response is automatically parsed into a JSONArray
                     //json.getJSONObject(0).getLong("id");
-                    swipeContainer.setRefreshing(false);
+//                    swipeContainer.setRefreshing(false);
                     ArrayList<Tweet> newTweets = Tweet.fromJson(json);
-                    Log.d(APP_TAG, "Tweets: " + tweets.toString());
+//                    Log.d(APP_TAG, "Tweets: " + tweets.toString());
                     if (newTweets != null && newTweets.size() > 0) {
                         MAX_ID = newTweets.get(newTweets.size() - 1).getUid();
                         Log.d(APP_TAG, "Max ID: " + MAX_ID);
                     }
-                    tweets.addAll(newTweets);
-                    tweetsAdapter.notifyDataSetChanged();
+                    fragmentTweetsList.addAll(newTweets);
+//                    tweetsAdapter.notifyDataSetChanged();
                 }
 
                 @Override
@@ -160,32 +156,32 @@ public class TimelineActivity extends AppCompatActivity implements TweetFragment
             // 1. fetch tweets from DB
             // 2. Populate adapter
             // 3. refresh view
-            retrieveDBTweets();
+//            retrieveDBTweets();
         }
     }
 
-    private void retrieveDBTweets() {
-        Toast.makeText(getApplicationContext(),"Retrieving tweets from DB",Toast.LENGTH_LONG).show();
-        tweetsAdapter.clearData();
-        List<Tweet> savedTweets = new Select().from(Tweet.class)
-                .orderBy("uid DESC")
-                .execute();
-        tweets.addAll(savedTweets);
-        tweetsAdapter.notifyDataSetChanged();
-        swipeContainer.setRefreshing(false);
-    }
+//    private void retrieveDBTweets() {
+//        Toast.makeText(getApplicationContext(),"Retrieving tweets from DB",Toast.LENGTH_LONG).show();
+//        tweetsAdapter.clearData();
+//        List<Tweet> savedTweets = new Select().from(Tweet.class)
+//                .orderBy("uid DESC")
+//                .execute();
+//        tweets.addAll(savedTweets);
+//        tweetsAdapter.notifyDataSetChanged();
+//        swipeContainer.setRefreshing(false);
+//    }
 
-    @Override
-    public void onFinishTweetingDialog(Tweet newTweet) {
-        if(newTweet!=null){
-            tweets.add(0,newTweet);
-//            tweetsAdapter.notifyItemChanged(0);
-            tweetsAdapter.notifyDataSetChanged();
-//            swipeContainer.setRefreshing(true);
-//            refreshTimeLine();
-        }
-        else{
-            Log.d(APP_TAG,"There was an error posting your tweet");
-        }
-    }
+//    @Override
+//    public void onFinishTweetingDialog(Tweet newTweet) {
+//        if(newTweet!=null){
+//            tweets.add(0,newTweet);
+////            tweetsAdapter.notifyItemChanged(0);
+//            tweetsAdapter.notifyDataSetChanged();
+////            swipeContainer.setRefreshing(true);
+////            refreshTimeLine();
+//        }
+//        else{
+//            Log.d(APP_TAG,"There was an error posting your tweet");
+//        }
+//    }
 }

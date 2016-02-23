@@ -5,29 +5,16 @@
     android:layout_height="match_parent"
 
     tools:context="com.codepath.apps.iTweetClient.actvities.TimelineActivity">
-    <android.support.v4.widget.SwipeRefreshLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/swipeContainer">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvTweets"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:src="@android:drawable/ic_input_add"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
-
-
+        <fragment
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:name="com.codepath.apps.iTweetClient.fragments.TweetsListFragment"
+            android:id="@+id/fragment_timeline" />
+    </FrameLayout>
 
 
 </RelativeLayout>
