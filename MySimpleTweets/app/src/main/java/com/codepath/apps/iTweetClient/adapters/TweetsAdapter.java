@@ -17,6 +17,7 @@ import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.actvities.TweetDetailActivity;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
+import com.codepath.apps.iTweetClient.utils.ItemClickSupport;
 import com.codepath.apps.iTweetClient.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,Target {
+    public static class ViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener,Target {
         @Bind(R.id.tvUserName) TextView tvUserName;
         @Bind(R.id.tvName) TextView tvScreenName;
         @Bind(R.id.tvBody) TextView tvBody;
@@ -41,44 +42,14 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(this,itemView);
-            itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
-        @Override
-        public void onClick(View v) {
-            int position = getLayoutPosition();
-            Log.d(Constants.APP_TAG,"pos: "+position);
-            Tweet tweet = tweets.get(position);
-            // create an intent to display the article
-            Intent tweetDetailIntent = new Intent(mContext,TweetDetailActivity.class);
-            tweetDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            // pass in that article into the intent
-            tweetDetailIntent.putExtra("tweet", Parcels.wrap(tweet));
-
-            // launch the activity
-            mContext.startActivity(tweetDetailIntent);
-        }
-
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-
-        }
-
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-        }
     } // End of ViewHolder class
 
 
-    private static List<Tweet> tweets;
-    private static Context mContext;
+    private List<Tweet> tweets;
+    private Context mContext;
 
     public TweetsAdapter(List<Tweet> tweetsList,Context context){
         this.tweets = tweetsList;

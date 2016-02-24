@@ -1,49 +1,23 @@
 package com.codepath.apps.iTweetClient.actvities;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
-import com.activeandroid.query.Select;
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.iTweetClient.R;
-import com.codepath.apps.iTweetClient.TwitterClient;
-import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
 import com.codepath.apps.iTweetClient.fragments.HomeTimelineFragment;
 import com.codepath.apps.iTweetClient.fragments.MentionsTimelineFragment;
-import com.codepath.apps.iTweetClient.fragments.PageFragment;
-import com.codepath.apps.iTweetClient.fragments.TweetFragment;
-import com.codepath.apps.iTweetClient.fragments.TweetFragment.TweetFragmentDialogListener;
 import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
-import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.models.User;
-import com.codepath.apps.iTweetClient.utils.Constants;
-import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
-import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.apache.http.Header;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static com.codepath.apps.iTweetClient.utils.Constants.*;
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
 public class TimelineActivity extends AppCompatActivity {//implements TweetFragmentDialogListener {
@@ -64,7 +38,7 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new SampleFragmentPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new TwitterFragmentPagerAdapter(getSupportFragmentManager()));
 
         // Give the PagerSlidingTabStrip the ViewPager
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
@@ -72,10 +46,10 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
         tabsStrip.setViewPager(viewPager);
     }
 
-    public class SampleFragmentPagerAdapter extends FragmentPagerAdapter {
+    public class TwitterFragmentPagerAdapter extends FragmentPagerAdapter {
         private String tabTitles[] = new String[] { "Home Timeline", "Mentions Timeline" };
 
-        public SampleFragmentPagerAdapter(FragmentManager fm) {
+        public TwitterFragmentPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
