@@ -1,5 +1,6 @@
 package com.codepath.apps.iTweetClient.actvities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
@@ -8,6 +9,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.iTweetClient.R;
@@ -80,10 +83,25 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
     }
 
 
+    public void onProfileView(MenuItem mi){
+        Intent viewProfileIntent = new Intent(this,ProfileActivity.class);
+        viewProfileIntent.putExtra("screenName","ipande");
+        startActivity(viewProfileIntent);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_timeline,menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return super.onOptionsItemSelected(item);
+    }
 
-//        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+    //        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
 //            @Override
 //            public void onLoadMore(int page, int totalItemsCount) {
 //                // Triggered only when new data needs to be appended to the list
