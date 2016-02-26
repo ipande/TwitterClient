@@ -22,6 +22,15 @@ public class User extends Model{
     @Column(name = "profileImage")
     String profileImage;
 
+    @Column(name="tagLine")
+    String tagLine;
+
+    @Column(name="followers")
+    int followers;
+
+    @Column(name="following")
+    int following;
+
     public String getUserName() {
         return userName;
     }
@@ -38,6 +47,18 @@ public class User extends Model{
         return profileImage;
     }
 
+    public String getTagLine() {
+        return tagLine;
+    }
+
+    public int getFollowers() {
+        return followers;
+    }
+
+    public int getFollowing() {
+        return following;
+    }
+
     public User(){
         super();
     }
@@ -51,6 +72,9 @@ public class User extends Model{
             this.userId = user.getLong("id");
             this.screen_name = user.getString("screen_name");
             this.profileImage = user.getString("profile_image_url");
+            this.tagLine = user.getString("description");
+            this.followers = user.getInt("followers_count");
+            this.following = user.getInt("friends_count");
 
         }catch (JSONException e) {
             Log.e(APP_TAG,"Failed in creating Tweet Object" + e.getMessage());

@@ -85,7 +85,7 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 
     public void onProfileView(MenuItem mi){
         Intent viewProfileIntent = new Intent(this,ProfileActivity.class);
-        viewProfileIntent.putExtra("screenName","ipande");
+        //viewProfileIntent.putExtra("screenName","ipande");
         startActivity(viewProfileIntent);
     }
 
