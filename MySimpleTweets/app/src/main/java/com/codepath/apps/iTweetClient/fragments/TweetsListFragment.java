@@ -17,6 +17,7 @@ import com.codepath.apps.iTweetClient.actvities.TweetDetailActivity;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.models.User;
+import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.iTweetClient.utils.ItemClickSupport;
 
 import org.parceler.Parcels;
@@ -33,11 +34,11 @@ public class TweetsListFragment extends Fragment {
 //    @Bind(R.id.swipeContainer)
 
     @Nullable
-    @Bind(R.id.rvTweets)
-    RecyclerView rvTweets;
+    @Bind(R.id.rvTweets) RecyclerView rvTweets;
     private TweetsAdapter tweetsAdapter;
     ArrayList<Tweet> tweets;
     private ItemClickSupport itemClick;
+    protected LinearLayoutManager linearLayoutManager;
 
 
     @Nullable
@@ -46,8 +47,9 @@ public class TweetsListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_tweets_list, parent, false);
         ButterKnife.bind(this, v);
         rvTweets.setAdapter(tweetsAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager = new LinearLayoutManager(getActivity());
         rvTweets.setLayoutManager(linearLayoutManager);
+
         itemClick = ItemClickSupport.addTo(rvTweets);
 
         itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
@@ -65,6 +67,8 @@ public class TweetsListFragment extends Fragment {
 
         return v;
     }
+
+
 
 
     @Override

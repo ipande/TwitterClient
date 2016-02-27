@@ -4,10 +4,14 @@ package com.codepath.apps.iTweetClient.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
+import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -26,12 +30,28 @@ public class MentionsTimelineFragment extends TweetsListFragment {
         super.onCreate(savedInstanceState);
         client = new TwitterClient(getActivity());
         populateTimeline(0);
+
+
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
+        View v =  super.onCreateView(inflater, parent, savedInstanceState);
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                populateTimeline(MAX_ID);
+            }
+        });
+        return v;
     }
 
     // Fill in listview with tweet JSON objects
     private void populateTimeline(long page) {
 
-        // TODO: add logic for checking internet
         if (Constants.isNetworkAvailable(getActivity())) {
             client.getMentionsTimeline(page, new JsonHttpResponseHandler() {
                 @Override
