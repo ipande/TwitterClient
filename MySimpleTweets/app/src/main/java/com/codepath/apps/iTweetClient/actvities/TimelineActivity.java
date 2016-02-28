@@ -107,28 +107,4 @@ public class TimelineActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-
-//    }
-
-
-
-
-
-
-
-
-//    private void retrieveDBTweets() {
-//        Toast.makeText(getApplicationContext(),"Retrieving tweets from DB",Toast.LENGTH_LONG).show();
-//        tweetsAdapter.clearData();
-//        List<Tweet> savedTweets = new Select().from(Tweet.class)
-//                .orderBy("uid DESC")
-//                .execute();
-//        tweets.addAll(savedTweets);
-//        tweetsAdapter.notifyDataSetChanged();
-//        swipeContainer.setRefreshing(false);
-//    }
-
-
 }

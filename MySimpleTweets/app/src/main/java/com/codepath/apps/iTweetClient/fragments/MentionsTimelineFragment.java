@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
@@ -19,6 +20,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
@@ -90,8 +92,16 @@ public class MentionsTimelineFragment extends TweetsListFragment {
             // 1. fetch tweets from DB
             // 2. Populate adapter
             // 3. refresh view
-//            retrieveDBTweets();
+            retrieveTweets("ipande");
         }
+    }
+
+    private void retrieveTweets(String searchTerm) {
+        List<Tweet> savedTweets = new Select().from(Tweet.class)
+                .where("body LIKE ?",new String[]{'%' + searchTerm + '%'})
+                .orderBy("uid DESC")
+                .execute();
+        retrieveDBTweets(savedTweets);
     }
 
 }

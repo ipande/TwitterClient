@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.actvities.TweetDetailActivity;
@@ -52,7 +54,6 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
         if(newTweet!=null){
             tweets.add(0,newTweet);
             tweetsAdapter.notifyItemChanged(0);
-//            tweetsAdapter.notifyDataSetChanged();
             swipeContainer.setRefreshing(true);
             linearLayoutManager.scrollToPosition(0);
             swipeContainer.setRefreshing(false);
@@ -151,4 +152,13 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
         tweetsAdapter.clearData();
         tweetsAdapter.notifyDataSetChanged();
     }
+
+    protected void retrieveDBTweets(List<Tweet> savedTweets) {
+        Toast.makeText(getActivity(), "Retrieving tweets from DB", Toast.LENGTH_LONG).show();
+        tweetsAdapter.clearData();
+        tweets.addAll(savedTweets);
+        tweetsAdapter.notifyDataSetChanged();
+//        swipeContainer.setRefreshing(false);
+    }
+
 }
