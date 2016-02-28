@@ -3,10 +3,14 @@ package com.codepath.apps.iTweetClient.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
+import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -18,14 +22,30 @@ import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
 public class UserTimelineFragment extends TweetsListFragment{
     private TwitterClient client;
-    private static long MAX_ID = 1;
+    private static long SINCE_ID = 0;
+    private String screenName;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = new TwitterClient(getActivity());
-        String screenName = getArguments().getString("screenName", null);
-        populateTimeline(screenName);
+        screenName = getArguments().getString("screenName", null);
+        populateTimeline(screenName,0);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup parent, @Nullable Bundle savedInstanceState) {
+        View v =  super.onCreateView(inflater, parent, savedInstanceState);
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                populateTimeline(screenName,totalItemsCount);
+            }
+        });
+        return v;
     }
 
     // Creates a new fragment given an int and title
@@ -39,24 +59,22 @@ public class UserTimelineFragment extends TweetsListFragment{
     }
 
     // Fill in listview with tweet JSON objects
-    private void populateTimeline(String screenName) {
+    private void populateTimeline(String screenName, long totalItemsCount) {
 
         // TODO: add logic for checking internet
         if (Constants.isNetworkAvailable(getActivity())) {
-            client.getUserTimeline(screenName, new JsonHttpResponseHandler() {
+            client.getUserTimeline(screenName, totalItemsCount, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                     // Response is automatically parsed into a JSONArray
-                    //json.getJSONObject(0).getLong("id");
 //                    swipeContainer.setRefreshing(false);
                     ArrayList<Tweet> newTweets = Tweet.fromJson(json);
 //                    Log.d(APP_TAG, "Tweets: " + tweets.toString());
                     if (newTweets != null && newTweets.size() > 0) {
-                        MAX_ID = newTweets.get(newTweets.size() - 1).getUid();
-                        Log.d(APP_TAG, "Max ID: " + MAX_ID);
+                        SINCE_ID = newTweets.size() - 1;
+                        Log.d(APP_TAG, "Max ID: " + SINCE_ID);
                     }
                     addAll(newTweets);
-//                    tweetsAdapter.notifyDataSetChanged();
                 }
 
                 @Override
