@@ -3,6 +3,7 @@ package com.codepath.apps.iTweetClient.actvities;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -11,23 +12,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.iTweetClient.R;
+import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.fragments.HomeTimelineFragment;
 import com.codepath.apps.iTweetClient.fragments.MentionsTimelineFragment;
+import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
+import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
-public class TimelineActivity extends AppCompatActivity {//implements TweetFragmentDialogListener {
+public class TimelineActivity extends AppCompatActivity {
 
-
-
-    private User currUser;
 //    SwipeRefreshLayout swipeContainer;
 
     TweetsListFragment fragmentTweetsList;
@@ -48,6 +54,11 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
         // Attach the view pager to the tab strip
         tabsStrip.setViewPager(viewPager);
     }
+
+//    @Override
+//    public void onComposeClickedListener() {
+//        showComposeTweetFragment();
+//    }
 
     public class TwitterFragmentPagerAdapter extends FragmentPagerAdapter {
         private String tabTitles[] = new String[] { "Home Timeline", "Mentions Timeline" };
@@ -111,13 +122,7 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 //            }
 //        });
 //
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                showComposeTweetFragment();
-//            }
-//        });
+
 
 //        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
 //                android.R.color.holo_green_light,
@@ -139,28 +144,6 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 //
 //    }
 
-//    private void showComposeTweetFragment() {
-//        getUserCredentials();
-//    }
-
-//    private void getUserCredentials() {
-//        client.getUserCredentials(new JsonHttpResponseHandler(){
-//            @Override
-//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//               Log.d(APP_TAG,"User credentials are here: "+response.toString());
-//                currUser = User.fromJSON(response);
-//                FragmentManager fm = getSupportFragmentManager();
-//                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser);
-//                tweetFragment.show(fm, "Compose Tweet");
-//            }
-//
-//
-//            @Override
-//            public void onFailure(int status, Header[] headers, Throwable t, JSONObject obj){
-//                Log.d(APP_TAG,"Failed to get user credentials"+t.getMessage());
-//            }
-//        });
-//    }
 
 
 
@@ -178,17 +161,5 @@ public class TimelineActivity extends AppCompatActivity {//implements TweetFragm
 //        swipeContainer.setRefreshing(false);
 //    }
 
-//    @Override
-//    public void onFinishTweetingDialog(Tweet newTweet) {
-//        if(newTweet!=null){
-//            tweets.add(0,newTweet);
-////            tweetsAdapter.notifyItemChanged(0);
-//            tweetsAdapter.notifyDataSetChanged();
-////            swipeContainer.setRefreshing(true);
-////            refreshTimeLine();
-//        }
-//        else{
-//            Log.d(APP_TAG,"There was an error posting your tweet");
-//        }
-//    }
+
 }

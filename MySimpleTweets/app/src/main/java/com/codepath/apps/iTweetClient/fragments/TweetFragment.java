@@ -130,7 +130,7 @@ public class TweetFragment extends DialogFragment {
                     Toast.makeText(mContext,"Tweeted successfully",Toast.LENGTH_SHORT).show();
                     tweetingSuccessfull= true;
                     newTweet = Tweet.fromJSONObject(response);
-                    TweetFragmentDialogListener listener = (TweetFragmentDialogListener) getActivity();
+                    TweetFragmentDialogListener listener = (TweetFragmentDialogListener) getTargetFragment();
                     listener.onFinishTweetingDialog(newTweet);
                     dismiss();
                 }

@@ -1,9 +1,12 @@
 package com.codepath.apps.iTweetClient.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,13 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.iTweetClient.R;
+import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.actvities.TweetDetailActivity;
 import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.models.User;
 import com.codepath.apps.iTweetClient.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.apps.iTweetClient.utils.ItemClickSupport;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
+import org.apache.http.Header;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -30,7 +37,7 @@ import butterknife.ButterKnife;
 
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
-public class TweetsListFragment extends Fragment {
+public class TweetsListFragment extends Fragment implements TweetFragment.TweetFragmentDialogListener {
 //    @Bind(R.id.swipeContainer)
 
     @Nullable
@@ -40,6 +47,19 @@ public class TweetsListFragment extends Fragment {
     private ItemClickSupport itemClick;
     protected LinearLayoutManager linearLayoutManager;
 
+    @Override
+    public void onFinishTweetingDialog(Tweet newTweet) {
+        if(newTweet!=null){
+            tweets.add(0,newTweet);
+//            tweetsAdapter.notifyItemChanged(0);
+            tweetsAdapter.notifyDataSetChanged();
+//            swipeContainer.setRefreshing(true);
+//            refreshTimeLine();
+        }
+        else{
+            Log.d(APP_TAG,"There was an error posting your tweet");
+        }
+    }
 
     @Nullable
     @Override
@@ -71,8 +91,42 @@ public class TweetsListFragment extends Fragment {
             }
         });
 
+        FloatingActionButton fab = (FloatingActionButton) v.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showComposeTweetFragment();
+            }
+        });
+
         return v;
     }
+
+
+    private void showComposeTweetFragment() {
+        getUserCredentials();
+    }
+
+    private void getUserCredentials() {
+        TwitterClient client = new TwitterClient(getActivity());
+        client.getUserCredentials(new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d(APP_TAG,"User credentials are here: "+response.toString());
+                User currUser = User.fromJSON(response);
+                FragmentManager fm = getFragmentManager();
+                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser);
+                tweetFragment.setTargetFragment(TweetsListFragment.this,300);
+                tweetFragment.show(fm, "Compose Tweet");
+            }
+
+            @Override
+            public void onFailure(int status, Header[] headers, Throwable t, JSONObject obj){
+                Log.d(APP_TAG,"Failed to get user credentials"+t.getMessage());
+            }
+        });
+    }
+
 
 
 
