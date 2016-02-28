@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.iTweetClient.R;
+import com.codepath.apps.iTweetClient.actvities.ProfileActivity;
 import com.codepath.apps.iTweetClient.actvities.TweetDetailActivity;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
 
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener,Target {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         @Bind(R.id.tvUserName) TextView tvUserName;
         @Bind(R.id.tvName) TextView tvScreenName;
         @Bind(R.id.tvBody) TextView tvBody;
@@ -45,6 +46,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
             ButterKnife.bind(this, itemView);
         }
 
+
     } // End of ViewHolder class
 
 
@@ -55,6 +57,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         this.tweets = tweetsList;
         this.mContext = context;
     }
+
 
     // Usually involves inflating a layout from XML and returning the holder
     @Override
@@ -71,9 +74,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(TweetsAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final TweetsAdapter.ViewHolder viewHolder, final int position) {
         // Get the data model based on position
-        Tweet tweet = tweets.get(position);
+        final Tweet tweet = tweets.get(position);
 
         // Set item views based on the data model
         TextView tvUserName = viewHolder.tvUserName;
@@ -91,6 +94,20 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         ImageView ivProfileImg = viewHolder.ivProfileImage;
         ivProfileImg.setImageResource(0);
+
+        ivProfileImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(Constants.APP_TAG,"Image clicked!");
+                Tweet clicked = tweets.get(position);
+                Log.d(Constants.APP_TAG,"profile: "+clicked.getScreen_name());
+                Intent viewProfileIntent = new Intent(mContext,ProfileActivity.class);
+                viewProfileIntent.putExtra("screenName",clicked.getScreen_name());
+                viewProfileIntent.putExtra("tweet",clicked.getUserName());
+                mContext.startActivity(viewProfileIntent);
+
+            }
+        });
 
         Picasso.with(mContext).load(tweet.getProfileImage()).fit().into(ivProfileImg);
     }

@@ -48,13 +48,30 @@ public class ProfileActivity extends AppCompatActivity {
 
         client = new TwitterClient(this);
 
-        client.getUserCredentials(new JsonHttpResponseHandler(){
+        client.getUser(screenName, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d(APP_TAG, "User credentials are here: " + response.toString());
                 User currUser = User.fromJSON(response);
                 getSupportActionBar().setTitle("@ "+currUser.getScreen_name());
                 populateUserInfo(currUser);
+            }
+
+
+            @Override
+            public void onFailure(int status, Header[] headers, Throwable t, JSONObject obj){
+                Log.d(APP_TAG,"Failed to get user credentials"+t.getMessage());
+            }
+
+        });
+
+        client.getUserCredentials(new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d(APP_TAG, "User credentials are here: " + response.toString());
+                User currUser = User.fromJSON(response);
+//                getSupportActionBar().setTitle("@ "+currUser.getScreen_name());
+//                populateUserInfo(currUser);
             }
 
 

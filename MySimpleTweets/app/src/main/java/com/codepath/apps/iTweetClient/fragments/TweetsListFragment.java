@@ -55,13 +55,19 @@ public class TweetsListFragment extends Fragment {
         itemClick.setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Tweet tweet = tweets.get(position);
-                // create an intent to display the article
-                Intent tweetDetailIntent = new Intent(getActivity(), TweetDetailActivity.class);
-                tweetDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                // pass in that article into the intent
-                tweetDetailIntent.putExtra("tweet", Parcels.wrap(tweet));
-                getActivity().startActivity(tweetDetailIntent);
+                Log.d(APP_TAG,"View clicked: "+v.getId()  );
+                if(v.getId() != R.id.ivProfileImage) {
+                    Tweet tweet = tweets.get(position);
+                    // create an intent to display the article
+                    Intent tweetDetailIntent = new Intent(getActivity(), TweetDetailActivity.class);
+                    tweetDetailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    // pass in that article into the intent
+                    tweetDetailIntent.putExtra("tweet", Parcels.wrap(tweet));
+                    getActivity().startActivity(tweetDetailIntent);
+                }
+                else{
+                    Log.d(APP_TAG,"Profile pic clicked!");
+                }
             }
         });
 
