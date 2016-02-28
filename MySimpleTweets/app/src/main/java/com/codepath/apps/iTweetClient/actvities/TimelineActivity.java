@@ -34,7 +34,6 @@ import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
 public class TimelineActivity extends AppCompatActivity {
 
-//    SwipeRefreshLayout swipeContainer;
 
     TweetsListFragment fragmentTweetsList;
 
@@ -55,10 +54,6 @@ public class TimelineActivity extends AppCompatActivity {
         tabsStrip.setViewPager(viewPager);
     }
 
-//    @Override
-//    public void onComposeClickedListener() {
-//        showComposeTweetFragment();
-//    }
 
     public class TwitterFragmentPagerAdapter extends FragmentPagerAdapter {
         private String tabTitles[] = new String[] { "Home Timeline", "Mentions Timeline" };
@@ -112,37 +107,11 @@ public class TimelineActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                // Triggered only when new data needs to be appended to the list
-//                // Add whatever code is needed to append new items to the bottom of the list
-//                Log.d(APP_TAG,"Loading tweets from page: "+page);
-//                populateTimeline(MAX_ID);
-//            }
-//        });
-//
 
 
-//        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
-//
-//        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-//            @Override
-//            public void onRefresh() {
-//                refreshTimeLine();
-//            }
-//        });
 
 //    }
 
-//    private void refreshTimeLine() {
-//        tweetsAdapter.clearData();
-//        populateTimeline(FIRST_PAGE);
-//
-//    }
 
 
 

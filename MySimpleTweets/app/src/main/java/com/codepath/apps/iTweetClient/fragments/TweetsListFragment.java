@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
 public class TweetsListFragment extends Fragment implements TweetFragment.TweetFragmentDialogListener {
-//    @Bind(R.id.swipeContainer)
+    @Bind(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Nullable
     @Bind(R.id.rvTweets) RecyclerView rvTweets;
@@ -51,10 +51,11 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
     public void onFinishTweetingDialog(Tweet newTweet) {
         if(newTweet!=null){
             tweets.add(0,newTweet);
-//            tweetsAdapter.notifyItemChanged(0);
-            tweetsAdapter.notifyDataSetChanged();
-//            swipeContainer.setRefreshing(true);
-//            refreshTimeLine();
+            tweetsAdapter.notifyItemChanged(0);
+//            tweetsAdapter.notifyDataSetChanged();
+            swipeContainer.setRefreshing(true);
+            linearLayoutManager.scrollToPosition(0);
+            swipeContainer.setRefreshing(false);
         }
         else{
             Log.d(APP_TAG,"There was an error posting your tweet");
@@ -99,6 +100,10 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
             }
         });
 
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
         return v;
     }
 
@@ -127,10 +132,6 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
         });
     }
 
-
-
-
-
     @Override
     // Create lifecycle event
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,6 +144,11 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
 
     public void addAll(ArrayList<Tweet> newTweets) {
         tweets.addAll(newTweets);
+        tweetsAdapter.notifyDataSetChanged();
+    }
+
+    public void clearData(){
+        tweetsAdapter.clearData();
         tweetsAdapter.notifyDataSetChanged();
     }
 }

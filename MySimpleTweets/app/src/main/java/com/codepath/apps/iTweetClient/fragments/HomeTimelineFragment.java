@@ -3,6 +3,7 @@ package com.codepath.apps.iTweetClient.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +35,12 @@ public class HomeTimelineFragment extends TweetsListFragment{
 
     }
 
+    public void refreshTimeLine(){
+        clearData();
+        MAX_ID = 1;
+        populateTimeline(MAX_ID);
+    }
+
 
     @Nullable
     @Override
@@ -47,6 +54,13 @@ public class HomeTimelineFragment extends TweetsListFragment{
                 populateTimeline(MAX_ID);
             }
         });
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshTimeLine();
+            }
+        });
         return v;
     }
 
@@ -58,8 +72,7 @@ public class HomeTimelineFragment extends TweetsListFragment{
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                     // Response is automatically parsed into a JSONArray
-                    //json.getJSONObject(0).getLong("id");
-//                    swipeContainer.setRefreshing(false);
+                    swipeContainer.setRefreshing(false);
                     ArrayList<Tweet> newTweets = Tweet.fromJson(json);
 //                    Log.d(APP_TAG, "Tweets: " + tweets.toString());
                     if (newTweets != null && newTweets.size() > 0) {
@@ -67,7 +80,6 @@ public class HomeTimelineFragment extends TweetsListFragment{
                         Log.d(APP_TAG, "Max ID: " + MAX_ID);
                     }
                     addAll(newTweets);
-//                    tweetsAdapter.notifyDataSetChanged();
                 }
 
                 @Override
