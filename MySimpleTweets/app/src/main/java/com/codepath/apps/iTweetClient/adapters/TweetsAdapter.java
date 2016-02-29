@@ -3,9 +3,6 @@ package com.codepath.apps.iTweetClient.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,18 +13,10 @@ import android.widget.TextView;
 
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.actvities.ProfileActivity;
-import com.codepath.apps.iTweetClient.actvities.TimelineActivity;
-import com.codepath.apps.iTweetClient.actvities.TweetDetailActivity;
-import com.codepath.apps.iTweetClient.fragments.TweetFragment;
-import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
-import com.codepath.apps.iTweetClient.utils.ItemClickSupport;
 import com.codepath.apps.iTweetClient.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
-import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -36,8 +25,12 @@ import butterknife.ButterKnife;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
 
-    public interface OnReplyTweet{
+    public interface OnReplyTweetListener {
         void onReplyTweet(Tweet t);
+    }
+
+    public interface OnFavoriteListener {
+        void onFavTweet(Tweet t);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -47,6 +40,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @Bind(R.id.tvTimestamp) TextView tvTimestamp;
         @Bind(R.id.ivProfileImage) ImageView ivProfileImage;
         @Bind(R.id.ivReply) ImageView ivReply;
+        @Bind(R.id.ivFav) ImageView ivFav;
 
 
         public ViewHolder(View itemView) {
@@ -121,6 +115,26 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         Picasso.with(mContext).load(tweet.getProfileImage()).fit().into(ivProfileImg);
 
+        final ImageView ivFavo = viewHolder.ivFav;
+        if(tweet.getFav())
+            ivFavo.setImageResource(R.drawable.ic_fav_on);
+        else
+            ivFavo.setImageResource(R.drawable.ic_fav);
+
+        ivFavo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tweet clicked = tweets.get(position);
+                if(clicked.getFav())
+                    ivFavo.setImageResource(R.drawable.ic_fav);
+                else
+                    ivFavo.setImageResource(R.drawable.ic_fav_on);
+
+                OnFavoriteListener listener = (OnFavoriteListener) mContext;
+                listener.onFavTweet(clicked);
+            }
+        });
+
         ImageView ivReply = viewHolder.ivReply;
         ivReply.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,10 +142,12 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
                 Log.d(Constants.APP_TAG,"Reply clicked!");
                 Tweet clicked = tweets.get(position);
                 Log.d(Constants.APP_TAG,"profile: "+clicked.getScreen_name());
-                OnReplyTweet listener = (OnReplyTweet) mContext;
+                OnReplyTweetListener listener = (OnReplyTweetListener) mContext;
                 listener.onReplyTweet(clicked);
             }
         });
+
+
 
     }
 

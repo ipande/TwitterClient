@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.iTweetClient.R;
@@ -25,6 +26,7 @@ import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.models.User;
+import com.codepath.apps.iTweetClient.utils.Constants;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -34,7 +36,7 @@ import butterknife.ButterKnife;
 
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
-public class TimelineActivity extends AppCompatActivity implements TweetsAdapter.OnReplyTweet {
+public class TimelineActivity extends AppCompatActivity implements TweetsAdapter.OnReplyTweetListener,TweetsAdapter.OnFavoriteListener {
 
 
     TweetsListFragment fragmentTweetsList;
@@ -89,6 +91,29 @@ public class TimelineActivity extends AppCompatActivity implements TweetsAdapter
     public void onReplyTweet(Tweet t) {
         Log.d(APP_TAG,"Here!");
         showComposeTweetFragment(t);
+    }
+
+    @Override
+    public void onFavTweet(Tweet t) {
+        TwitterClient client = new TwitterClient(this);
+        client.favTweet(Long.toString(t.getUid()),!t.getFav(),new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONObject response) {
+                Tweet newTweet = Tweet.fromJSONObject(response);
+                newTweet.save();
+                String favTed;
+                if(newTweet.getFav())
+                    favTed = "Favorited!";
+                else
+                    favTed = "Un Favorited!";
+                Toast.makeText(getApplicationContext(),favTed,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                Log.d(Constants.APP_TAG, errorResponse.toString());
+            }
+        });
     }
 
 

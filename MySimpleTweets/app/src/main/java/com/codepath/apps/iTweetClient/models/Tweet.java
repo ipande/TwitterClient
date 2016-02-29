@@ -32,11 +32,15 @@ public class Tweet extends Model {
     String body;
     @Column(name = "uid", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     Long uid;
+    @Column(name = "fav")
+    Boolean fav;
 
     @Column(name = "createdAt")
     String createdAt;
 
-
+    public Boolean getFav() {
+        return fav;
+    }
 
     // Make sure to always define this constructor with no arguments
     public Tweet() {
@@ -88,7 +92,8 @@ public class Tweet extends Model {
             this.screen_name = user.getString("screen_name");
             this.profileImage = user.getString("profile_image_url");
 
-            
+            this.fav = object.getBoolean("favorited");
+
             //this.userHandle = object.getString("user_username");
             //this.timestamp = object.getString("timestamp");
 

@@ -70,4 +70,14 @@
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_marginBottom="5dp"/>
 
+    <ImageView
+        android:id="@+id/ivFav"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_fav"
+        android:layout_below="@+id/tvBody"
+        android:layout_toRightOf="@+id/ivReply"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="5dp"/>
+
 </RelativeLayout>

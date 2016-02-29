@@ -25,7 +25,7 @@
             android:value="RestClient.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="4" />
+            android:value="6" />
 
         <activity
             android:name=".LoginActivity"
