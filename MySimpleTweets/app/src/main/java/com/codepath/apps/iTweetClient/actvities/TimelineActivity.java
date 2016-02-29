@@ -1,32 +1,25 @@
 package com.codepath.apps.iTweetClient.actvities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ProgressBar;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.iTweetClient.R;
-import com.codepath.apps.iTweetClient.TwitterClient;
 import com.codepath.apps.iTweetClient.fragments.HomeTimelineFragment;
 import com.codepath.apps.iTweetClient.fragments.MentionsTimelineFragment;
-import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
-import com.codepath.apps.iTweetClient.models.Tweet;
-import com.codepath.apps.iTweetClient.models.User;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.apache.http.Header;
-import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 
@@ -36,13 +29,14 @@ public class TimelineActivity extends AppCompatActivity {
 
 
     TweetsListFragment fragmentTweetsList;
+    MenuItem miActionProgressItem;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         ButterKnife.bind(this);
-
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -52,6 +46,8 @@ public class TimelineActivity extends AppCompatActivity {
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
         tabsStrip.setViewPager(viewPager);
+
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#55acee")));
     }
 
 
@@ -70,6 +66,7 @@ public class TimelineActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             Log.d(APP_TAG,"position: "+position);
+
             switch(position){
                 case 0: {
                     return new HomeTimelineFragment();
@@ -95,10 +92,22 @@ public class TimelineActivity extends AppCompatActivity {
         startActivity(viewProfileIntent);
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline,menu);
         return true;
+    }
+
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

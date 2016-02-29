@@ -24,5 +24,7 @@
     <style name="TweetActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
     </style>
+    <style name="MyActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
 
 </resources>

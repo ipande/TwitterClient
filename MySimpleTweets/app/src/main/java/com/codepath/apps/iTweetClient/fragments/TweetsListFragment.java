@@ -7,13 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.activeandroid.query.Select;
@@ -48,6 +53,8 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
     ArrayList<Tweet> tweets;
     private ItemClickSupport itemClick;
     protected LinearLayoutManager linearLayoutManager;
+
+    MenuItem miActionProgressItem;
 
     @Override
     public void onFinishTweetingDialog(Tweet newTweet) {
@@ -139,8 +146,7 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
         super.onCreate(savedInstanceState);
         tweets = new ArrayList<>();
         tweetsAdapter = new TweetsAdapter(tweets, getActivity());
-
-
+        setHasOptionsMenu(true);
     }
 
     public void addAll(ArrayList<Tweet> newTweets) {
@@ -158,7 +164,31 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
         tweetsAdapter.clearData();
         tweets.addAll(savedTweets);
         tweetsAdapter.notifyDataSetChanged();
-//        swipeContainer.setRefreshing(false);
+        if(swipeContainer!=null)
+            swipeContainer.setRefreshing(false);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+//        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+    }
+
+    public void showProgressBar() {
+        // Show progress item
+        if(miActionProgressItem!=null)
+            miActionProgressItem.setVisible(true);
+    }
+
+    public void hideProgressBar() {
+        // Hide progress item
+        if(miActionProgressItem!=null)
+            miActionProgressItem.setVisible(false);
+    }
 }

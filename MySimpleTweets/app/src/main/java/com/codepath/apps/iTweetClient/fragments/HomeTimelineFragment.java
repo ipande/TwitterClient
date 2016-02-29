@@ -70,6 +70,7 @@ public class HomeTimelineFragment extends TweetsListFragment{
     private void populateTimeline(long page) {
 
         if(Constants.isNetworkAvailable(getActivity())) {
+            showProgressBar();
             client.getHomeTimeline(page, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
@@ -82,11 +83,13 @@ public class HomeTimelineFragment extends TweetsListFragment{
                         Log.d(APP_TAG, "Max ID: " + MAX_ID);
                     }
                     addAll(newTweets);
+                    hideProgressBar();
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                     Log.d(APP_TAG, "Failed" + statusCode + " resp " + responseString + "err: " + throwable.getMessage());
+                    hideProgressBar();
                 }
             });
         }
