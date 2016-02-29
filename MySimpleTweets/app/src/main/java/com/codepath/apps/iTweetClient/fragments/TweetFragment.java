@@ -63,10 +63,11 @@ public class TweetFragment extends DialogFragment {
     }
 
 
-    public static TweetFragment newInstance(String title, User user) {
+    public static TweetFragment newInstance(String title, User user,String mention) {
         TweetFragment frag = new TweetFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
+        args.putString("mention",mention);
         frag.setArguments(args);
         currUser = user;
         return frag;
@@ -95,11 +96,16 @@ public class TweetFragment extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Enter Name");
+        String mention = getArguments().getString("mention", null);
         getDialog().setTitle(title);
         mContext = view.getContext();
 
         textColor = tvCharsLeft.getCurrentTextColor();
         mTweetText.addTextChangedListener(textWatcher);
+        if(mention!=null) {
+            getDialog().setTitle("Reply to Tweet");
+            mTweetText.setText("@" + mention);
+        }
 
         Picasso.with(getContext()).load(currUser.getProfileImage()).fit().into(ivProfilePic);
         tvScreenName.setText(currUser.getScreen_name());
@@ -131,7 +137,10 @@ public class TweetFragment extends DialogFragment {
                     tweetingSuccessfull= true;
                     newTweet = Tweet.fromJSONObject(response);
                     TweetFragmentDialogListener listener = (TweetFragmentDialogListener) getTargetFragment();
-                    listener.onFinishTweetingDialog(newTweet);
+                    if(listener!=null)
+                        listener.onFinishTweetingDialog(newTweet);
+//                    else
+//                        listener = getActivity().getSupportFragmentManager().
                     dismiss();
                 }
 

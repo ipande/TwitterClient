@@ -25,21 +25,21 @@
         android:layout_marginRight="5dp"
         android:layout_marginLeft="5dp"
         android:typeface="monospace"
-        android:capitalize="words" />
+         />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Body"
         android:id="@+id/tvBody"
         android:autoLink="all"
         android:linksClickable="true"
-        android:layout_alignBottom="@+id/ivProfileImage"
         android:layout_toRightOf="@+id/ivProfileImage"
         android:layout_toEndOf="@+id/ivProfileImage"
         android:layout_below="@id/tvUserName"
         android:layout_marginLeft="5dp"
-        android:typeface="sans" />
+        android:typeface="sans"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -60,4 +60,14 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:id="@+id/ivReply"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_reply"
+        android:layout_below="@+id/tvBody"
+        android:layout_toRightOf="@+id/ivProfileImage"
+        android:layout_marginBottom="5dp"/>
+
 </RelativeLayout>

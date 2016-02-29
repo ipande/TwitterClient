@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,10 @@ import android.widget.TextView;
 
 import com.codepath.apps.iTweetClient.R;
 import com.codepath.apps.iTweetClient.actvities.ProfileActivity;
+import com.codepath.apps.iTweetClient.actvities.TimelineActivity;
 import com.codepath.apps.iTweetClient.actvities.TweetDetailActivity;
+import com.codepath.apps.iTweetClient.fragments.TweetFragment;
+import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
 import com.codepath.apps.iTweetClient.models.Tweet;
 import com.codepath.apps.iTweetClient.utils.Constants;
 import com.codepath.apps.iTweetClient.utils.ItemClickSupport;
@@ -32,6 +36,9 @@ import butterknife.ButterKnife;
 
 public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder>{
 
+    public interface OnReplyTweet{
+        void onReplyTweet(Tweet t);
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         @Bind(R.id.tvUserName) TextView tvUserName;
@@ -39,6 +46,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         @Bind(R.id.tvBody) TextView tvBody;
         @Bind(R.id.tvTimestamp) TextView tvTimestamp;
         @Bind(R.id.ivProfileImage) ImageView ivProfileImage;
+        @Bind(R.id.ivReply) ImageView ivReply;
 
 
         public ViewHolder(View itemView) {
@@ -95,6 +103,8 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         ImageView ivProfileImg = viewHolder.ivProfileImage;
         ivProfileImg.setImageResource(0);
 
+
+
         ivProfileImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,6 +120,19 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         });
 
         Picasso.with(mContext).load(tweet.getProfileImage()).fit().into(ivProfileImg);
+
+        ImageView ivReply = viewHolder.ivReply;
+        ivReply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(Constants.APP_TAG,"Reply clicked!");
+                Tweet clicked = tweets.get(position);
+                Log.d(Constants.APP_TAG,"profile: "+clicked.getScreen_name());
+                OnReplyTweet listener = (OnReplyTweet) mContext;
+                listener.onReplyTweet(clicked);
+            }
+        });
+
     }
 
     @Override

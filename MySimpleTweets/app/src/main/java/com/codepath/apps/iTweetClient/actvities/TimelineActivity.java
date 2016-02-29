@@ -17,15 +17,24 @@ import android.widget.ProgressBar;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.iTweetClient.R;
+import com.codepath.apps.iTweetClient.TwitterClient;
+import com.codepath.apps.iTweetClient.adapters.TweetsAdapter;
 import com.codepath.apps.iTweetClient.fragments.HomeTimelineFragment;
 import com.codepath.apps.iTweetClient.fragments.MentionsTimelineFragment;
+import com.codepath.apps.iTweetClient.fragments.TweetFragment;
 import com.codepath.apps.iTweetClient.fragments.TweetsListFragment;
+import com.codepath.apps.iTweetClient.models.Tweet;
+import com.codepath.apps.iTweetClient.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
 
 import butterknife.ButterKnife;
 
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements TweetsAdapter.OnReplyTweet {
 
 
     TweetsListFragment fragmentTweetsList;
@@ -48,6 +57,38 @@ public class TimelineActivity extends AppCompatActivity {
         tabsStrip.setViewPager(viewPager);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#55acee")));
+    }
+
+
+    private void showComposeTweetFragment(Tweet t) {
+        getUserCredentials(t);
+    }
+
+    private void getUserCredentials(final Tweet t) {
+        TwitterClient client = new TwitterClient(this);
+        client.getUserCredentials(new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Log.d(APP_TAG,"User credentials are here: "+response.toString());
+                User currUser = User.fromJSON(response);
+                FragmentManager fm = getSupportFragmentManager();
+                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser,t.getScreen_name());
+                tweetFragment.setTargetFragment(new HomeTimelineFragment(),300);
+                tweetFragment.show(fm, "Compose Tweet");
+            }
+
+            @Override
+            public void onFailure(int status, Header[] headers, Throwable t, JSONObject obj){
+                Log.d(APP_TAG,"Failed to get user credentials"+t.getMessage());
+            }
+        });
+    }
+
+
+    @Override
+    public void onReplyTweet(Tweet t) {
+        Log.d(APP_TAG,"Here!");
+        showComposeTweetFragment(t);
     }
 
 

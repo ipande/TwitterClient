@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 
 import static com.codepath.apps.iTweetClient.utils.Constants.APP_TAG;
 
-public class TweetsListFragment extends Fragment implements TweetFragment.TweetFragmentDialogListener {
+public class TweetsListFragment extends Fragment implements TweetFragment.TweetFragmentDialogListener{
     @Bind(R.id.swipeContainer) SwipeRefreshLayout swipeContainer;
 
     @Nullable
@@ -58,7 +58,7 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
 
     @Override
     public void onFinishTweetingDialog(Tweet newTweet) {
-        if(newTweet!=null){
+        if(newTweet!=null && tweets!=null){
             tweets.add(0,newTweet);
             tweetsAdapter.notifyItemChanged(0);
             swipeContainer.setRefreshing(true);
@@ -128,7 +128,7 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
                 Log.d(APP_TAG,"User credentials are here: "+response.toString());
                 User currUser = User.fromJSON(response);
                 FragmentManager fm = getFragmentManager();
-                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser);
+                TweetFragment tweetFragment = TweetFragment.newInstance("Compose Tweet", currUser,null);
                 tweetFragment.setTargetFragment(TweetsListFragment.this,300);
                 tweetFragment.show(fm, "Compose Tweet");
             }
@@ -191,4 +191,5 @@ public class TweetsListFragment extends Fragment implements TweetFragment.TweetF
         if(miActionProgressItem!=null)
             miActionProgressItem.setVisible(false);
     }
+
 }
